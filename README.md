@@ -49,7 +49,7 @@ The project was built to gain practical experience with **web scraping, backend 
 
 ## 🛠️ Technologies Used
 
-| Technology | Purpose |
+| **Technology** | **Purpose** |
 |---|---|
 | HTML | Frontend structure |
 | CSS | User interface and responsive design |
