@@ -31,6 +31,19 @@ CrawlAI simplifies this process by allowing users to:
 The project was built to gain practical experience with **web scraping, backend development, data extraction, APIs, security, and deployment**.
 
 ---
+## 💡 Why I Built CrawlAI
+
+I built CrawlAI as a hands-on project to strengthen my understanding of web scraping, backend development, APIs, data extraction, security, and deployment.
+
+Instead of building only a small demo, I wanted to take the idea from development to a publicly accessible application.
+
+This project helped me understand the complete journey:
+
+**Idea → Development → Security → GitHub → Deployment → Live Application**
+
+CrawlAI is also an ongoing project, and I plan to continue improving it with new extraction capabilities and features.
+
+----
 
 ## ✨ Key Features
 
