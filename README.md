@@ -11,7 +11,9 @@ CrawlAI is a web data extraction tool built with Node.js, Express and Cheerio.
 
 
 https://crawlai-960r.onrender.com
+## 📸 Screenshot
 
+![CrawlAI Screenshot](crawlai-screenshot.png)
 
 
 \## ✨ Features
