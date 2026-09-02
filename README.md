@@ -1,110 +1,80 @@
-\# 🚀 CrawlAI
+# 🚀 CrawlAI
 
+> A lightweight web data extraction tool built with Node.js, Express.js, and Cheerio.
 
+CrawlAI makes it easy to extract structured information from webpages through a simple and user-friendly interface.
 
-CrawlAI is a web data extraction tool built with Node.js, Express and Cheerio.
+It supports product extraction, complete webpage extraction, custom CSS-selector extraction, and JSON/CSV exports.
 
+## 🌐 Live Demo
 
+👉 Try CrawlAI: https://crawlai-960r.onrender.com
 
-\## 🌐 Live Demo
-
-
-
-https://crawlai-960r.onrender.com
-## 📸 Screenshot
+## 📸 Preview
 
 ![CrawlAI Screenshot](crawlai-screenshot.png)
 
+---
 
-\## ✨ Features
+## 🎯 What Problem Does CrawlAI Solve?
 
+Collecting information from websites manually can be repetitive and time-consuming.
 
+CrawlAI simplifies this process by allowing users to:
 
-\- Product data extraction
+1. Enter a webpage URL
+2. Choose an extraction mode
+3. Extract structured information
+4. View the results
+5. Download the data as JSON or CSV
 
-\- Custom data extraction
+The project was built to gain practical experience with **web scraping, backend development, data extraction, APIs, security, and deployment**.
 
-\- Complete webpage extraction
+---
 
-\- JSON export
+## ✨ Key Features
 
-\- CSV export
+- 🔍 **Product Extraction** — Extract product titles, prices, availability, images, and URLs.
+- 📄 **Everything Extraction** — Extract page title, description, headings, links, images, and text.
+- 🎯 **Custom Extraction** — Extract specific webpage elements using CSS selectors.
+- 📋 **JSON Export** — Download extracted data as JSON.
+- 📊 **CSV Export** — Download structured data as CSV.
+- 🔐 **URL Validation** — Validate URLs before making requests.
+- 🛡️ **Basic SSRF Protection** — Block localhost and common private/internal IP ranges.
+- 🚦 **Rate Limiting** — Help prevent excessive API requests.
+- ⏱️ **Request Timeout** — Prevent requests from running indefinitely.
+- 📱 **Responsive Interface** — Works across different screen sizes.
 
-\- URL validation
+---
 
-\- Rate limiting
+## 🛠️ Technologies Used
 
-\- Responsive web interface
+| Technology | Purpose |
+|---|---|
+| HTML | Frontend structure |
+| CSS | User interface and responsive design |
+| JavaScript | Frontend functionality |
+| Node.js | Backend runtime |
+| Express.js | Web server and API |
+| Cheerio | HTML parsing and data extraction |
+| Git & GitHub | Version control |
+| Render | Cloud deployment |
 
+---
 
+## 🔄 How It Works
 
-\## 🛠️ Tech Stack
-
-
-
-\- HTML
-
-\- CSS
-
-\- JavaScript
-
-\- Node.js
-
-\- Express.js
-
-\- Cheerio
-
-
-
-\## ▶️ Run Locally
-
-
-
-Install dependencies:
-
-
-
-npm install
-
-
-
-Start the application:
-
-
-
-npm start
-
-
-
-Open:
-
-
-
-http://localhost:3000
-
-
-
-\## 🔐 Security
-
-
-
-CrawlAI includes URL validation, private IP blocking, DNS validation, request timeout protection and rate limiting.
-
-
-
-\## 👩‍💻 Author
-
-
-
-Khushi Tiwari
-
-
-
-Software Engineer
-
-
-
-GitHub:
-
-https://github.com/Khushitiwari2303/CrawlAI
-
+```text
+Enter URL
+    ↓
+Choose Extraction Mode
+    ↓
+CrawlAI Fetches Webpage
+    ↓
+Cheerio Parses HTML
+    ↓
+Structured Data Generated
+    ↓
+View Results
+    ↓
+Download JSON / CSV
