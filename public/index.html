@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CrawlAI - Web Data Extractor</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    /* HEADER */
+
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 18px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .badge {
+      background: #eef2ff;
+      color: #4f46e5;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* HERO */
+
+    .hero {
+      text-align: center;
+      padding: 70px 20px 45px;
+    }
+
+    .hero h1 {
+      font-size: 46px;
+      color: #111827;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #6b7280;
+      margin-bottom: 35px;
+    }
+
+    /* SCRAPER BOX */
+
+    .scraper-box {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .main-controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    #url {
+      flex: 1;
+      padding: 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    #url:focus,
+    #customFields input:focus,
+    #mode:focus {
+      border-color: #6366f1;
+    }
+
+    #mode {
+      padding: 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      background: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    #scrapeButton {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 10px;
+      background: #4f46e5;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    #scrapeButton:hover {
+      background: #4338ca;
+    }
+
+    #scrapeButton:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    /* CUSTOM FIELDS */
+
+    #customFields {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 18px;
+      text-align: left;
+    }
+
+    #customFields input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .custom-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #374151;
+    }
+
+    /* STATUS */
+
+    #status {
+      margin-top: 20px;
+      font-size: 15px;
+      min-height: 22px;
+    }
+
+    /* RESULTS */
+
+    .results {
+      max-width: 1200px;
+      margin: 20px auto 80px;
+      padding: 0 20px;
+    }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 25px;
+    }
+
+    .results-header h2 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    #count {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .download-buttons button {
+      border: 1px solid #d1d5db;
+      background: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .download-buttons button:hover {
+      background: #f3f4f6;
+    }
+
+    .download-buttons button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* BOOK CARDS */
+
+    .books {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .book {
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s ease;
+    }
+
+    .book:hover {
+      transform: translateY(-4px);
+    }
+
+    .book img {
+      width: 100%;
+      height: 230px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    .book h3 {
+      font-size: 17px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .rating {
+      margin-bottom: 8px;
+    }
+
+    .availability {
+      color: #16a34a;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .book a {
+      color: #4f46e5;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .book a:hover {
+      text-decoration: underline;
+    }
+
+    /* EVERYTHING RESULT */
+
+    .generic-result {
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .generic-result h2 {
+      margin-bottom: 10px;
+    }
+
+    .generic-result h3 {
+      margin: 20px 0 10px;
+    }
+
+    .generic-result ul {
+      padding-left: 20px;
+      line-height: 1.8;
+    }
+
+    .generic-result hr {
+      margin: 25px 0;
+      border: none;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* EMPTY STATE */
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #9ca3af;
+    }
+
+    .empty-icon {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: #111827;
+      color: #d1d5db;
+      text-align: center;
+      padding: 25px;
+      font-size: 14px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 768px) {
+
+      .hero {
+        padding-top: 45px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .main-controls {
+        flex-direction: column;
+      }
+
+      #url,
+      #mode,
+      #scrapeButton {
+        width: 100%;
+      }
+
+      .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .download-buttons {
+        width: 100%;
+      }
+
+      .download-buttons button {
+        flex: 1;
+      }
+
+      header {
+        padding: 15px 20px;
+      }
+
+      .badge {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+
+    <div class="logo">
+      🚀 CrawlAI
+    </div>
+
+    <div class="badge">
+      Web Data Extractor
+    </div>
+
+  </header>
+
+
+  <section class="hero">
+
+    <h1>
+      Extract Web Data in Seconds
+    </h1>
+
+    <p>
+      Turn any website into structured data with CrawlAI.
+    </p>
+
+
+    <div class="scraper-box">
+
+      <div class="main-controls">
+
+        <input id="url" type="text" placeholder="https://books.toscrape.com/">
+
+        <select id="mode" onchange="toggleCustomFields()">
+
+          <option value="products">
+            Products
+          </option>
+
+          <option value="everything">
+            Everything
+          </option>
+
+          <option value="custom">
+            Custom
+          </option>
+
+        </select>
+
+
+        <button id="scrapeButton" onclick="scrape()">
+          Scrape
+        </button>
+
+      </div>
+
+
+      <!-- CUSTOM EXTRACTION -->
+
+      <div id="customFields">
+
+        <div class="custom-title">
+          Custom Extraction
+        </div>
+
+        <input id="itemSelector" type="text" placeholder="Item selector e.g. article.product_pod">
+
+        <input id="titleSelector" type="text" placeholder="Title selector e.g. h3 a">
+
+        <input id="priceSelector" type="text" placeholder="Price selector e.g. .price_color">
+
+        <input id="availabilitySelector" type="text" placeholder="Availability selector e.g. .availability">
+
+        <input id="imageSelector" type="text" placeholder="Image selector e.g. img">
+
+        <input id="urlSelector" type="text" placeholder="URL selector e.g. h3 a">
+
+      </div>
+
+    </div>
+
+
+    <div id="status"></div>
+
+  </section>
+
+
+  <!-- RESULTS -->
+
+  <section class="results">
+
+    <div class="results-header">
+
+      <div>
+
+        <h2>
+          Results
+        </h2>
+
+        <span id="count"></span>
+
+      </div>
+
+
+      <div class="download-buttons">
+
+        <button id="jsonButton" onclick="downloadJSON()" disabled>
+          📄 JSON
+        </button>
+
+        <button id="csvButton" onclick="downloadCSV()" disabled>
+          📊 CSV
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div id="books" class="books">
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          🔎
+        </div>
+
+        <p>
+          Enter a website URL and start scraping.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <footer>
+
+    🚀 CrawlAI — Simple Web Data Extraction
+
+  </footer>
+
+
+  <script>
+
+    let scrapedData = [];
+
+    let currentMode = 'products';
+
+
+    // ==========================================
+    // CUSTOM FIELD TOGGLE
+    // ==========================================
+
+    function toggleCustomFields() {
+
+      const mode =
+        document.getElementById('mode').value;
+
+      const customFields =
+        document.getElementById('customFields');
+
+
+      if (mode === 'custom') {
+
+        customFields.style.display = 'flex';
+
+      } else {
+
+        customFields.style.display = 'none';
+
+      }
+
+      currentMode = mode;
+
+    }
+
+
+    // ==========================================
+    // SCRAPE
+    // ==========================================
+
+    async function scrape() {
+
+      const url =
+        document.getElementById('url')
+          .value
+          .trim();
+
+      const mode =
+        document.getElementById('mode')
+          .value;
+
+      const button =
+        document.getElementById('scrapeButton');
+
+      const status =
+        document.getElementById('status');
+
+      const booksContainer =
+        document.getElementById('books');
+
+      const count =
+        document.getElementById('count');
+
+
+      if (!url) {
+
+        status.textContent =
+          'Please enter a website URL.';
+
+        return;
+
+      }
+
+
+      button.disabled = true;
+
+      button.textContent = 'Scraping...';
+
+      status.textContent =
+        'Fetching website data...';
+
+      booksContainer.innerHTML = '';
+
+      count.textContent = '';
+
+      currentMode = mode;
+
+
+      try {
+
+        let endpoint;
+
+        let requestUrl;
+
+
+        // PRODUCTS
+
+        if (mode === 'products') {
+
+          endpoint = '/scrape';
+
+          requestUrl =
+            endpoint +
+            '?url=' +
+            encodeURIComponent(url);
+
+        }
+
+
+        // EVERYTHING
+
+        else if (mode === 'everything') {
+
+          endpoint = '/extract';
+
+          requestUrl =
+            endpoint +
+            '?url=' +
+            encodeURIComponent(url);
+
+        }
+
+
+        // CUSTOM
+
+        else {
+
+          endpoint = '/custom';
+
+
+          const itemSelector =
+            document.getElementById('itemSelector')
+              .value
+              .trim();
+
+          const titleSelector =
+            document.getElementById('titleSelector')
+              .value
+              .trim();
+
+          const priceSelector =
+            document.getElementById('priceSelector')
+              .value
+              .trim();
+
+          const availabilitySelector =
+            document.getElementById('availabilitySelector')
+              .value
+              .trim();
+
+          const imageSelector =
+            document.getElementById('imageSelector')
+              .value
+              .trim();
+
+          const urlSelector =
+            document.getElementById('urlSelector')
+              .value
+              .trim();
+
+
+          if (!itemSelector) {
+
+            status.textContent =
+              'Please enter an item selector.';
+
+            button.disabled = false;
+
+            button.textContent = 'Scrape';
+
+            return;
+
+          }
+
+
+          requestUrl =
+            endpoint +
+            '?url=' +
+            encodeURIComponent(url) +
+
+            '&itemSelector=' +
+            encodeURIComponent(itemSelector) +
+
+            '&titleSelector=' +
+            encodeURIComponent(titleSelector) +
+
+            '&priceSelector=' +
+            encodeURIComponent(priceSelector) +
+
+            '&availabilitySelector=' +
+            encodeURIComponent(availabilitySelector) +
+
+            '&imageSelector=' +
+            encodeURIComponent(imageSelector) +
+
+            '&urlSelector=' +
+            encodeURIComponent(urlSelector);
+
+        }
+
+
+        const response =
+          await fetch(requestUrl);
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error || 'Scraping failed'
+          );
+
+        }
+
+
+        scrapedData = data;
+
+
+        document.getElementById('jsonButton')
+          .disabled = false;
+
+        document.getElementById('csvButton')
+          .disabled = false;
+
+
+        // =====================================
+        // PRODUCTS
+        // =====================================
+
+        if (mode === 'products') {
+
+          count.textContent =
+            `${data.length} products`;
+
+          status.textContent =
+            '✅ Scraping completed successfully!';
+
+
+          data.forEach(book => {
+
+            const card =
+              document.createElement('div');
+
+            card.className = 'book';
+
+
+            const stars =
+              '⭐'.repeat(book.rating || 0);
+
+
+            card.innerHTML = `
+
+                    <img
+                        src="${book.image}"
+                        alt="${book.title}"
+                    >
+
+                    <h3>
+                        ${book.title}
+                    </h3>
+
+                    <div class="price">
+                        £${book.price}
+                    </div>
+
+                    <div class="rating">
+                        ${stars}
+                    </div>
+
+                    <div class="availability">
+                        ${book.availability}
+                    </div>
+
+                    <a
+                        href="${book.url}"
+                        target="_blank"
+                    >
+                        View Product →
+                    </a>
+
+                `;
+
+
+            booksContainer.appendChild(card);
+
+          });
+
+        }
+
+
+        // =====================================
+        // CUSTOM
+        // =====================================
+
+        else if (mode === 'custom') {
+
+          count.textContent =
+            `${data.length} results`;
+
+          status.textContent =
+            '✅ Custom extraction completed!';
+
+
+          data.forEach(item => {
+
+            const card =
+              document.createElement('div');
+
+            card.className = 'book';
+
+
+            card.innerHTML = `
+
+                    ${item.image
+                ?
+                `<img
+                            src="${item.image}"
+                            alt="${item.title || 'Extracted image'}"
+                        >`
+                :
+                ''
+              }
+
+                    <h3>
+                        ${item.title || 'No title found'}
+                    </h3>
+
+                    <div class="price">
+                        ${item.price || 'No price found'}
+                    </div>
+
+                    <div class="availability">
+                        ${item.availability ||
+              'No availability found'
+              }
+                    </div>
+
+                    ${item.url
+                ?
+                `<a
+                            href="${item.url}"
+                            target="_blank"
+                        >
+                            View Item →
+                        </a>`
+                :
+                ''
+              }
+
+                `;
+
+
+            booksContainer.appendChild(card);
+
+          });
+
+        }
+
+
+        // =====================================
+        // EVERYTHING
+        // =====================================
+
+        else {
+
+          count.textContent =
+            `${data.headings.length} headings • ${data.links.length} links • ${data.images.length} images`;
+
+
+          status.textContent =
+            '✅ Website extraction completed!';
+
+
+          const card =
+            document.createElement('div');
+
+          card.className =
+            'generic-result';
+
+
+          card.innerHTML = `
+
+                <h2>
+                    ${data.title || 'Website Data'}
+                </h2>
+
+                <p>
+                    ${data.description ||
+            'No description found.'
+            }
+                </p>
+
+                <hr>
+
+                <h3>
+                    Headings (${data.headings.length})
+                </h3>
+
+                <ul>
+
+                    ${data.headings
+              .slice(0, 20)
+              .map(h => `<li>${h}</li>`)
+              .join('')
+            }
+
+                </ul>
+
+
+                <hr>
+
+
+                <h3>
+                    Links (${data.links.length})
+                </h3>
+
+                <ul>
+
+                    ${data.links
+              .slice(0, 20)
+              .map(link => `
+
+                            <li>
+
+                                <a
+                                    href="${link.url}"
+                                    target="_blank"
+                                >
+                                    ${link.text ||
+                link.url
+                }
+                                </a>
+
+                            </li>
+
+                        `)
+              .join('')
+            }
+
+                </ul>
+
+
+                <hr>
+
+
+                <h3>
+                    Images (${data.images.length})
+                </h3>
+
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:
+                        repeat(auto-fill,minmax(150px,1fr));
+                        gap:15px;
+                        margin-top:15px;
+                    "
+                >
+
+                    ${data.images
+              .slice(0, 20)
+              .map(image => `
+
+                            <img
+                                src="${image}"
+                                alt="Extracted image"
+                                style="
+                                    width:100%;
+                                    height:150px;
+                                    object-fit:contain;
+                                    border:1px solid #e5e7eb;
+                                    border-radius:8px;
+                                    padding:5px;
+                                "
+                            >
+
+                        `)
+              .join('')
+            }
+
+                </div>
+
+
+                <hr>
+
+
+                <h3>
+                    Extracted Text
+                </h3>
+
+                <p
+                    style="
+                        margin-top:10px;
+                        line-height:1.6;
+                        color:#4b5563;
+                    "
+                >
+                    ${data.text ||
+            'No text found.'
+            }
+                </p>
+
+            `;
+
+
+          booksContainer.appendChild(card);
+
+        }
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+          '❌ ' + error.message;
+
+      }
+
+
+      button.disabled = false;
+
+      button.textContent = 'Scrape';
+
+    }
+
+
+    // ==========================================
+    // DOWNLOAD JSON
+    // ==========================================
+
+    function downloadJSON() {
+
+      const json =
+        JSON.stringify(
+          scrapedData,
+          null,
+          2
+        );
+
+
+      const blob =
+        new Blob(
+          [json],
+          {
+            type: 'application/json'
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(blob);
+
+
+      const a =
+        document.createElement('a');
+
+      a.href = url;
+
+      a.download =
+        'crawlai-data.json';
+
+      a.click();
+
+
+      URL.revokeObjectURL(url);
+
+    }
+
+
+    // ==========================================
+    // DOWNLOAD CSV
+    // ==========================================
+
+    function downloadCSV() {
+
+      if (Array.isArray(scrapedData)) {
+
+        if (scrapedData.length === 0) {
+          return;
+        }
+
+
+        const headers =
+          Object.keys(
+            scrapedData[0]
+          );
+
+
+        const rows =
+          scrapedData.map(item => {
+
+            return headers.map(header => {
+
+              const value =
+                item[header] ?? '';
+
+              return `"${String(value)
+                .replace(/"/g, '""')}"`;
+
+            }).join(',');
+
+          });
+
+
+        const csv =
+          [
+            headers.join(','),
+            ...rows
+          ].join('\n');
+
+
+        const blob =
+          new Blob(
+            [csv],
+            {
+              type: 'text/csv'
+            }
+          );
+
+
+        const url =
+          URL.createObjectURL(blob);
+
+
+        const a =
+          document.createElement('a');
+
+        a.href = url;
+
+        a.download =
+          'crawlai-data.csv';
+
+        a.click();
+
+
+        URL.revokeObjectURL(url);
+
+      }
+
+      else if (
+        typeof scrapedData === 'object' &&
+        scrapedData !== null
+      ) {
+
+        const rows = [];
+
+
+        rows.push([
+          'Type',
+          'Data'
+        ]);
+
+
+        if (scrapedData.title) {
+
+          rows.push([
+            'Title',
+            scrapedData.title
+          ]);
+
+        }
+
+
+        if (scrapedData.description) {
+
+          rows.push([
+            'Description',
+            scrapedData.description
+          ]);
+
+        }
+
+
+        if (scrapedData.headings) {
+
+          scrapedData.headings.forEach(
+            (h, i) => {
+
+              rows.push([
+                `Heading ${i + 1}`,
+                h
+              ]);
+
+            }
+          );
+
+        }
+
+
+        if (scrapedData.links) {
+
+          scrapedData.links.forEach(
+            (link, i) => {
+
+              rows.push([
+                `Link ${i + 1}`,
+                link.text || link.url
+              ]);
+
+            }
+          );
+
+        }
+
+
+        if (scrapedData.images) {
+
+          scrapedData.images.forEach(
+            (img, i) => {
+
+              rows.push([
+                `Image ${i + 1}`,
+                img
+              ]);
+
+            }
+          );
+
+        }
+
+
+        if (scrapedData.text) {
+
+          rows.push([
+            'Text',
+            scrapedData.text
+          ]);
+
+        }
+
+
+        const csv =
+          rows
+            .map(row =>
+              row.map(value =>
+                `"${String(value)
+                  .replace(/"/g, '""')}"`
+              ).join(',')
+            )
+            .join('\n');
+
+
+        const blob =
+          new Blob(
+            [csv],
+            {
+              type: 'text/csv'
+            }
+          );
+
+
+        const url =
+          URL.createObjectURL(blob);
+
+
+        const a =
+          document.createElement('a');
+
+        a.href = url;
+
+        a.download =
+          'crawlai-data.csv';
+
+        a.click();
+
+
+        URL.revokeObjectURL(url);
+
+      }
+
+    }
+
+  </script>
+
+</body>
+
+</html>

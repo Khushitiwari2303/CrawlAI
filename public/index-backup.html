@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CrawlAI - Web Scraper</title>
+
+  <style>
+    .scraper-box select {
+      padding: 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 16px;
+      background: white;
+    }
+
+    .scraper-box select:focus,
+    .scraper-box input:focus {
+      outline: none;
+      border-color: #111827;
+    }
+
+    .results-header button {
+      padding: 10px 16px;
+      margin-left: 8px;
+      border: none;
+      border-radius: 6px;
+      background: #111827;
+      color: white;
+      cursor: pointer;
+    }
+
+    .results-header button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .badge {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    .scraper-box {
+      max-width: 800px;
+      margin: auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    .scraper-box input {
+      flex: 1;
+      padding: 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .scraper-box button {
+      padding: 16px 28px;
+      border: none;
+      border-radius: 8px;
+      background: #111827;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .scraper-box button:hover {
+      background: #374151;
+    }
+
+    .scraper-box button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 20px;
+      color: #6b7280;
+    }
+
+    .results {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .books {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .book {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    .book img {
+      width: 100%;
+      height: 240px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    .book h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      min-height: 40px;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .rating {
+      margin-bottom: 8px;
+    }
+
+    .availability {
+      color: #16a34a;
+      font-size: 14px;
+    }
+
+    .book a {
+      display: inline-block;
+      margin-top: 12px;
+      text-decoration: none;
+      color: #2563eb;
+      font-size: 14px;
+    }
+
+    .generic-result {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+      grid-column: 1 / -1;
+    }
+
+    .generic-result ul {
+      padding-left: 20px;
+      margin: 10px 0 20px;
+    }
+
+    .generic-result hr {
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    @media (max-width: 700px) {
+      .scraper-box {
+        flex-direction: column;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .results-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      🚀 CrawlAI
+    </div>
+    <div class="badge">
+      Web Data Extractor
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Extract Web Data in Seconds</h1>
+    <p>
+      Enter a website URL and CrawlAI will extract structured data for you.
+    </p>
+
+    <div class="scraper-box">
+      <input id="url" type="text" placeholder="https://books.toscrape.com/">
+      <select id="mode">
+        <option value="products">Products</option>
+        <option value="everything">Everything</option>
+      </select>
+      <button id="scrapeButton" onclick="scrape()">
+        Scrape
+      </button>
+    </div>
+
+    <div id="status"></div>
+  </section>
+
+  <section class="results">
+    <div class="results-header">
+      <div>
+        <h2>Results</h2>
+        <span id="count"></span>
+      </div>
+      <div>
+        <button id="jsonButton" onclick="downloadJSON()" disabled>
+          Download JSON
+        </button>
+        <button id="csvButton" onclick="downloadCSV()" disabled>
+          Download CSV
+        </button>
+      </div>
+    </div>
+
+    <div id="books" class="books"></div>
+  </section>
+
+  <script>
+    let scrapedData = [];
+
+    async function scrape() {
+      const url = document.getElementById('url').value.trim();
+      const mode = document.getElementById('mode').value;
+      const button = document.getElementById('scrapeButton');
+      const status = document.getElementById('status');
+      const booksContainer = document.getElementById('books');
+      const count = document.getElementById('count');
+
+      if (!url) {
+        status.textContent = 'Please enter a website URL.';
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Scraping...';
+      status.textContent = 'Fetching website data...';
+      booksContainer.innerHTML = '';
+      count.textContent = '';
+
+      try {
+        const endpoint = mode === 'products' ? '/scrape' : '/extract';
+        const response = await fetch(
+          endpoint + '?url=' + encodeURIComponent(url)
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Scraping failed');
+        }
+
+        scrapedData = data;
+        document.getElementById('jsonButton').disabled = false;
+        document.getElementById('csvButton').disabled = false;
+
+        // PRODUCTS MODE
+        if (mode === 'products') {
+          count.textContent = `${data.length} products`;
+          status.textContent = 'Scraping completed successfully!';
+
+          data.forEach(book => {
+            const card = document.createElement('div');
+            card.className = 'book';
+            const stars = '⭐'.repeat(book.rating || 0);
+
+            card.innerHTML = `
+              <img src="${book.image}" alt="${book.title}">
+              <h3>${book.title}</h3>
+              <div class="price">£${book.price}</div>
+              <div class="rating">${stars}</div>
+              <div class="availability">${book.availability}</div>
+              <a href="${book.url}" target="_blank">View Product →</a>
+            `;
+
+            booksContainer.appendChild(card);
+          });
+        }
+
+        // EVERYTHING MODE
+        else {
+          count.textContent =
+            `${data.links.length} links • ${data.images.length} images`;
+          status.textContent = 'Website extraction completed successfully!';
+
+          const card = document.createElement('div');
+          card.className = 'generic-result';
+
+          card.innerHTML = `
+            <h2>${data.title || 'Website Data'}</h2>
+            <p>${data.description || 'No description found.'}</p>
+            <hr>
+            <h3>Headings</h3>
+            <ul>
+              ${data.headings.slice(0, 10).map(h => `<li>${h}</li>`).join('')}
+            </ul>
+            <h3>Links: ${data.links.length}</h3>
+            <h3>Images: ${data.images.length}</h3>
+          `;
+
+          booksContainer.appendChild(card);
+        }
+
+      } catch (error) {
+        console.error(error);
+        status.textContent = '❌ ' + error.message;
+      }
+
+      button.disabled = false;
+      button.textContent = 'Scrape';
+    }
+
+    function downloadJSON() {
+      const json = JSON.stringify(scrapedData, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'crawlai-data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadCSV() {
+      if (!scrapedData.length) {
+        return;
+      }
+
+      const headers = Object.keys(scrapedData[0]);
+      const rows = scrapedData.map(item => {
+        return headers.map(header => {
+          const value = item[header] ?? '';
+          return `"${String(value).replace(/"/g, '""')}"`;
+        }).join(',');
+      });
+
+      const csv = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'crawlai-data.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+</body>
+
+</html>
