@@ -1,14 +1,23 @@
 {
   "name": "crawlai",
   "version": "1.0.0",
-  "description": "",
+  "description": "A lightweight web data extraction tool built with Node.js, Express.js and Cheerio.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+  "web scraping",
+  "web scraper",
+  "data extraction",
+  "node.js",
+  "express",
+  "cheerio",
+  "csv",
+  "json"
+],
+"author": "Khushi Tiwari",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
